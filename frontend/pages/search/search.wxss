@@ -1,0 +1,158 @@
+.search-bar {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.search-input {
+  flex: 1;
+  height: 88rpx;
+  background: white;
+  border-radius: 44rpx;
+  padding: 0 32rpx;
+  font-size: 28rpx;
+  border: 2rpx solid #eee;
+}
+
+.search-btn {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+  color: white;
+  border-radius: 44rpx;
+  padding: 0 40rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.result-list {
+  padding: 10rpx 0;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-icon {
+  font-size: 48rpx;
+  margin-right: 20rpx;
+}
+
+.result-info {
+  flex: 1;
+}
+
+.result-name {
+  font-size: 30rpx;
+  color: #333;
+  display: block;
+}
+
+.result-category {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.result-arrow {
+  font-size: 40rpx;
+  color: #ddd;
+}
+
+.hot-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.hot-tag {
+  background: #f8f9fa;
+  padding: 16rpx 28rpx;
+  border-radius: 32rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.price-list {
+  padding: 10rpx 0;
+}
+
+.price-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.price-item:last-child {
+  border-bottom: none;
+}
+
+.price-rank {
+  width: 48rpx;
+  height: 48rpx;
+  background: #ff6b6b;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+}
+
+.price-info {
+  flex: 1;
+}
+
+.store-name {
+  font-size: 28rpx;
+  color: #333;
+  display: block;
+}
+
+.store-type {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.price-detail {
+  text-align: right;
+}
+
+.price-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #ff6b6b;
+  display: block;
+}
+
+.best-price {
+  background: #fff3e0;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  margin-top: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+.best-label {
+  font-size: 26rpx;
+  color: #e65100;
+}
+
+.best-value {
+  font-size: 28rpx;
+  color: #e65100;
+  font-weight: bold;
+  margin-left: 8rpx;
+}

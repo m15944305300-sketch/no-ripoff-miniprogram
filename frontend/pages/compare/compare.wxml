@@ -1,0 +1,46 @@
+<wxs src="../../utils/helper.wxs" module="helper" />
+<view class="container">
+  <view class="card">
+    <view class="card-header">
+      <text class="card-title">添加水果对比</text>
+    </view>
+    <view class="fruit-grid">
+      <view class="fruit-option {{item.selected ? 'selected' : ''}}" wx:for="{{fruits}}" wx:key="id" bindtap="toggleFruit" data-id="{{item.id}}" data-name="{{item.name}}">
+        <view class="fruit-icon">{{helper.getEmoji(item.name)}}</view>
+        <text class="fruit-name">{{item.name}}</text>
+        <view class="checkbox" wx:if="{{item.selected}}">✓</view>
+      </view>
+    </view>
+    <button class="compare-btn" bindtap="compare" wx:if="{{selectedFruits.length > 0}}">
+      对比 {{selectedFruits.length}} 种水果
+    </button>
+    <text class="tip-text" wx:else>请选择至少一种水果进行对比</text>
+  </view>
+
+  <view wx:if="{{compareResults && Object.keys(compareResults).length > 0}}" class="card">
+    <view class="card-header">
+      <text class="card-title">价格对比结果</text>
+      <button class="clear-btn" bindtap="clearSelection">清空</button>
+    </view>
+    <view class="compare-table">
+      <view class="table-header">
+        <text class="th-fruit">水果</text>
+        <text class="th-store">最低价商超</text>
+        <text class="th-price">价格</text>
+        <text class="th-grade">等级</text>
+      </view>
+      <view class="table-body">
+        <view class="table-row" wx:for="{{compareData}}" wx:key="fruit">
+          <text class="td-fruit">{{helper.getEmoji(item.fruit)}} {{item.fruit}}</text>
+          <text class="td-store">{{item.best_store}}</text>
+          <text class="td-price">¥{{item.best_price}}</text>
+          <text class="td-grade grade-tag grade-{{helper.gradeShort(item.best_grade)}}">{{item.best_grade}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="total-info">
+      <text class="total-label">购买建议：</text>
+      <text class="total-value">去 {{bestStore}} 购买最划算</text>
+    </view>
+  </view>
+</view>

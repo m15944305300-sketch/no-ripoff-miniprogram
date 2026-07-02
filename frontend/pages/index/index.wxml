@@ -1,0 +1,63 @@
+<wxs src="../../utils/helper.wxs" module="helper" />
+<view class="container">
+  <view class="header">
+    <text class="title">🍎 水果价格助手</text>
+    <text class="subtitle">帮你买水果不被宰</text>
+  </view>
+
+  <view class="card">
+    <view class="card-header">
+      <text class="card-title">今日热门水果</text>
+    </view>
+    <scroll-view scroll-x class="fruit-scroll">
+      <view class="fruit-list">
+        <view class="fruit-item" wx:for="{{fruits}}" wx:key="id" bindtap="goToCompare" data-id="{{item.id}}" data-name="{{item.name}}">
+          <view class="fruit-icon">{{helper.getEmoji(item.name)}}</view>
+          <text class="fruit-name">{{item.name}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="card">
+    <view class="card-header">
+      <text class="card-title">实时价格对比</text>
+      <text class="card-more">查看全部</text>
+    </view>
+    <view wx:if="{{currentPrices.length > 0}}">
+      <view class="price-item" wx:for="{{currentPrices}}" wx:key="store_id">
+        <view class="price-left">
+          <text class="store-name">{{item.store_name}}</text>
+          <text class="store-type">{{item.store_type}}</text>
+        </view>
+        <view class="price-right">
+          <text class="price-value">¥{{item.price}}/{{item.unit}}</text>
+          <text class="grade-tag grade-{{helper.gradeShort(item.grade)}}">{{item.grade}}</text>
+        </view>
+      </view>
+    </view>
+    <view wx:else>
+      <text class="empty-text">点击上方水果查看价格</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-header">
+      <text class="card-title">使用指南</text>
+    </view>
+    <view class="guide-list">
+      <view class="guide-item">
+        <text class="guide-icon">🔍</text>
+        <text class="guide-text">搜索或选择水果</text>
+      </view>
+      <view class="guide-item">
+        <text class="guide-icon">📊</text>
+        <text class="guide-text">对比各商超价格</text>
+      </view>
+      <view class="guide-item">
+        <text class="guide-icon">🛒</text>
+        <text class="guide-text">选择最低价购买</text>
+      </view>
+    </view>
+  </view>
+</view>

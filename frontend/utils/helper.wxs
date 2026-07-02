@@ -1,0 +1,25 @@
+// WXS 工具模块：提供 emoji 映射与等级处理
+// 注意：WXS 不支持 ES6 语法，只能用 var / function
+var emojis = {
+  '苹果': '🍎',
+  '香蕉': '🍌',
+  '橙子': '🍊',
+  '西瓜': '🍉',
+  '葡萄': '🍇',
+  '草莓': '🍓',
+  '芒果': '🥭',
+  '榴莲': '🍍',
+  '蓝莓': '🫐',
+  '樱桃': '🍒'
+}
+
+module.exports = {
+  getEmoji: function (name) {
+    return emojis[name] || '🍎'
+  },
+  // 去掉 "级" 字，用于 CSS 类名：A级 -> A
+  gradeShort: function (grade) {
+    if (!grade) return ''
+    return grade.replace('级', '')
+  }
+}

@@ -1,0 +1,127 @@
+.header {
+  text-align: center;
+  padding: 40rpx 0;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+  border-radius: 0 0 32rpx 32rpx;
+  margin: -20rpx -20rpx 20rpx -20rpx;
+}
+
+.title {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: white;
+  display: block;
+}
+
+.subtitle {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 8rpx;
+  display: block;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.card-more {
+  font-size: 24rpx;
+  color: #ff6b6b;
+}
+
+.fruit-scroll {
+  white-space: nowrap;
+}
+
+.fruit-list {
+  display: inline-flex;
+  gap: 20rpx;
+}
+
+.fruit-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  background: #f8f9fa;
+  border-radius: 16rpx;
+  min-width: 120rpx;
+}
+
+.fruit-icon {
+  font-size: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.fruit-name {
+  font-size: 24rpx;
+  color: #333;
+}
+
+.price-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.price-item:last-child {
+  border-bottom: none;
+}
+
+.store-name {
+  font-size: 28rpx;
+  color: #333;
+  display: block;
+}
+
+.store-type {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.price-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
+.empty-text {
+  text-align: center;
+  color: #999;
+  padding: 40rpx;
+  font-size: 26rpx;
+}
+
+.guide-list {
+  display: flex;
+  justify-content: space-around;
+}
+
+.guide-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.guide-icon {
+  font-size: 40rpx;
+  margin-bottom: 8rpx;
+}
+
+.guide-text {
+  font-size: 22rpx;
+  color: #666;
+}
