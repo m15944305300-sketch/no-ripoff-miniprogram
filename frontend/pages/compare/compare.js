@@ -25,14 +25,10 @@ Page({
 
   getLocation: function () {
     var that = this
-    wx.request({
-      url: app.globalData.baseUrl + '/locate/',
-      timeout: 5000,
-      header: { 'Bypass-Tunnel-Reminder': '1' },
+    wx.cloud.callFunction({
+      name: 'locate',
       success: function (res) {
-        if (res.data && res.data.city) {
-          that.setData({ location: res.data.city })
-        }
+        that.setData({ location: res.result.city || '延吉市' })
       },
       fail: function () {
         that.setData({ location: '延吉市' })
@@ -43,14 +39,12 @@ Page({
   getFruits: function () {
     if (this.data.loading) return
     this.setData({ loading: true, loadFailed: false })
-    wx.request({
-      url: app.globalData.baseUrl + '/fruits/',
-      timeout: 8000,
-      header: { 'Bypass-Tunnel-Reminder': '1' },
+    wx.cloud.callFunction({
+      name: 'getFruits',
       success: (res) => {
-        if (res.data && Array.isArray(res.data)) {
+        if (res.result && res.result.success && Array.isArray(res.result.data)) {
           var seen = {}
-          var fruits = res.data.filter(function (f) {
+          var fruits = res.result.data.filter(function (f) {
             if (!f || !f.id || seen[f.id]) return false
             seen[f.id] = true
             return true
@@ -70,32 +64,21 @@ Page({
   selectFruit: function (e) {
     var fruitId = e.currentTarget.dataset.id
     var fruitName = e.currentTarget.dataset.name
+    this.setData({ selectedFruit: fruitName, trendData: [], downCount: 0, upCount: 0 })
 
-    this.setData({
-      selectedFruit: fruitName,
-      trendData: [],
-      downCount: 0,
-      upCount: 0
-    })
-
-    wx.request({
-      url: app.globalData.baseUrl + '/price-trend/' + fruitId,
-      timeout: 8000,
-      header: { 'Bypass-Tunnel-Reminder': '1' },
+    wx.cloud.callFunction({
+      name: 'priceTrend',
+      data: { fruitId: fruitId },
       success: (res) => {
-        if (res.data && Array.isArray(res.data)) {
+        if (res.result && res.result.success && Array.isArray(res.result.data)) {
           var down = 0
           var up = 0
-          for (var i = 0; i < res.data.length; i++) {
-            var c = res.data[i].change
+          for (var i = 0; i < res.result.data.length; i++) {
+            var c = res.result.data[i].change
             if (c !== null && c < 0) down++
             else if (c !== null && c > 0) up++
           }
-          this.setData({
-            trendData: res.data,
-            downCount: down,
-            upCount: up
-          })
+          this.setData({ trendData: res.result.data, downCount: down, upCount: up })
         }
       },
       fail: () => {

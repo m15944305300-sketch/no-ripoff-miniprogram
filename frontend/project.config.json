@@ -45,6 +45,7 @@
   "compileType": "miniprogram",
   "libVersion": "3.3.4",
   "appid": "wxb76dfcf3f13f9b62",
+  "cloudfunctionRoot": "functions/",
   "projectname": "fruit-price-helper",
   "isGameTourist": false,
   "condition": {},

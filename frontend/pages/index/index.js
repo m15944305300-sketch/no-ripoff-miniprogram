@@ -1,4 +1,4 @@
-const app = getApp()
+var app = getApp()
 
 Page({
   data: {
@@ -16,7 +16,6 @@ Page({
   },
 
   onShow: function () {
-    // 如果水果列表为空，重新加载（tab切换回来时）
     if (this.data.fruits.length === 0 && !this.data.loading) {
       this.getFruits()
     }
@@ -24,14 +23,10 @@ Page({
 
   getLocation: function () {
     var that = this
-    wx.request({
-      url: app.globalData.baseUrl + '/locate/',
-      timeout: 5000,
-      header: { 'Bypass-Tunnel-Reminder': '1' },
+    wx.cloud.callFunction({
+      name: 'locate',
       success: function (res) {
-        if (res.data && res.data.city) {
-          that.setData({ location: res.data.city })
-        }
+        that.setData({ location: res.result.city || '延吉市' })
       },
       fail: function () {
         that.setData({ location: '延吉市' })
@@ -40,39 +35,26 @@ Page({
   },
 
   getFruits: function () {
-    // 防止重复调用
     if (this.data.loading) return
-
     this.setData({ loading: true, loadFailed: false })
-    wx.request({
-      url: app.globalData.baseUrl + '/fruits/',
-      timeout: 8000,
-      header: { 'Bypass-Tunnel-Reminder': '1' },
+    wx.cloud.callFunction({
+      name: 'getFruits',
       success: (res) => {
-        if (res.data && Array.isArray(res.data)) {
-          // 确保每项都有唯一key，去重保护
+        if (res.result && res.result.success && Array.isArray(res.result.data)) {
           var seen = {}
-          var fruits = res.data.filter(function (f) {
+          var fruits = res.result.data.filter(function (f) {
             if (!f || !f.id || seen[f.id]) return false
             seen[f.id] = true
             return true
           })
-          this.setData({
-            fruits: fruits,
-            loading: false,
-            loadFailed: false
-          })
+          this.setData({ fruits: fruits, loading: false, loadFailed: false })
         } else {
           this.setData({ loading: false, loadFailed: true })
         }
       },
       fail: () => {
         this.setData({ loading: false, loadFailed: true })
-        wx.showToast({
-          title: '网络连接失败，请检查后端服务',
-          icon: 'none',
-          duration: 2000
-        })
+        wx.showToast({ title: '网络连接失败', icon: 'none', duration: 2000 })
       }
     })
   },
@@ -80,19 +62,14 @@ Page({
   goToCompare: function (e) {
     var fruitId = e.currentTarget.dataset.id
     var fruitName = e.currentTarget.dataset.name
+    this.setData({ selectedFruit: fruitName, currentPrices: [] })
 
-    this.setData({
-      selectedFruit: fruitName,
-      currentPrices: []
-    })
-
-    wx.request({
-      url: app.globalData.baseUrl + '/prices/' + fruitId,
-      timeout: 8000,
-      header: { 'Bypass-Tunnel-Reminder': '1' },
+    wx.cloud.callFunction({
+      name: 'getPrices',
+      data: { fruitId: fruitId },
       success: (res) => {
-        if (res.data && Array.isArray(res.data)) {
-          this.setData({ currentPrices: res.data })
+        if (res.result && res.result.success && Array.isArray(res.result.data)) {
+          this.setData({ currentPrices: res.result.data })
         }
       },
       fail: () => {
