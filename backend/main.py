@@ -60,9 +60,7 @@ def get_fruit_prices(fruit_id: int, region: str = None, db: Session = Depends(ge
     if region:
         query = query.join(Store).filter(Store.region == region)
     prices = query.all()
-    if not prices:
-        raise HTTPException(status_code=404, detail="价格数据未找到")
-
+    # 无价格时返回空数组，前端显示"暂无价格"，不报错
     result = []
     for price in prices:
         result.append({

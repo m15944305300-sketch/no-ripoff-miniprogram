@@ -13,27 +13,27 @@
 
   <view class="card">
     <view class="card-header">
-      <text class="card-title">今日热门水果</text>
+      <text class="card-title">全部水果</text>
+      <text class="fruit-count">{{fruits.length}}种</text>
     </view>
     <view wx:if="{{loading}}" class="empty-text">加载中...</view>
     <view wx:elif="{{loadFailed}}" class="empty-text">
       <text>数据加载失败</text>
       <view class="retry-btn" bindtap="getFruits">点击重试</view>
     </view>
-    <scroll-view wx:else scroll-x class="fruit-scroll">
-      <view class="fruit-list">
-        <view class="fruit-item" wx:for="{{fruits}}" wx:key="id" bindtap="goToCompare" data-id="{{item.id}}" data-name="{{item.name}}">
-          <view class="fruit-icon">{{helper.getEmoji(item.name)}}</view>
-          <text class="fruit-name">{{item.name}}</text>
-        </view>
+    <view wx:else class="fruit-grid">
+      <view class="fruit-item" wx:for="{{fruits}}" wx:key="id" bindtap="goToCompare" data-id="{{item.id}}" data-name="{{item.name}}" hover-class="fruit-hover">
+        <view class="fruit-icon">{{helper.getEmoji(item.name)}}</view>
+        <text class="fruit-name">{{item.name}}</text>
+        <text class="fruit-category">{{item.category}}</text>
       </view>
-    </scroll-view>
+    </view>
   </view>
 
   <view class="card">
     <view class="card-header">
       <text class="card-title">实时价格对比</text>
-      <text class="card-more">查看全部</text>
+      <text class="card-more" wx:if="{{selectedFruit}}">{{selectedFruit}}</text>
     </view>
     <!-- 等级说明 -->
     <view class="grade-legend">
@@ -64,6 +64,9 @@
           <text class="grade-tag grade-{{helper.gradeShort(item.grade)}}">{{item.grade}}</text>
         </view>
       </view>
+    </view>
+    <view wx:elif="{{selectedFruit}}" class="empty-text">
+      <text>该水果今日暂无价格数据</text>
     </view>
     <view wx:else>
       <text class="empty-text">点击上方水果查看价格</text>

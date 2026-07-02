@@ -7,7 +7,7 @@ Page({
     currentPrices: [],
     selectedFruit: '',
     showPrices: false,
-    hotFruits: ['苹果', '香蕉', '西瓜', '草莓', '葡萄', '芒果', '榴莲', '蓝莓', '苹果梨'],
+    hotFruits: ['苹果', '香蕉', '西瓜', '草莓', '葡萄', '芒果', '榴莲', '蓝莓', '猕猴桃', '山竹', '樱桃', '火龙果', '苹果梨', '哈密瓜', '橙子'],
     location: '延吉市'
   },
 
@@ -18,7 +18,8 @@ Page({
   getLocation: function () {
     var that = this
     wx.request({
-      url: app.globalData.baseUrl.replace('/api', '') + '/api/locate/',
+      url: app.globalData.baseUrl + '/locate/',
+      timeout: 5000,
       success: function (res) {
         that.setData({ location: res.data.city })
       },
@@ -36,20 +37,16 @@ Page({
   },
 
   search: function () {
-    const keyword = this.data.keyword.trim()
+    var keyword = this.data.keyword.trim()
     if (!keyword) {
-      wx.showToast({
-        title: '请输入搜索内容',
-        icon: 'none'
-      })
+      wx.showToast({ title: '请输入搜索内容', icon: 'none' })
       return
     }
 
     wx.request({
-      url: `${app.globalData.baseUrl}/search/`,
-      data: {
-        keyword: keyword
-      },
+      url: app.globalData.baseUrl + '/search/',
+      data: { keyword: keyword },
+      timeout: 8000,
       success: (res) => {
         this.setData({
           searchResults: res.data,
@@ -57,60 +54,36 @@ Page({
         })
       },
       fail: () => {
-        wx.showToast({
-          title: '搜索失败',
-          icon: 'none'
-        })
+        wx.showToast({ title: '搜索失败', icon: 'none' })
       }
     })
   },
 
   searchTag: function (e) {
-    const tag = e.currentTarget.dataset.text || e.currentTarget.innerText
-    this.setData({
-      keyword: tag
-    })
+    var tag = e.currentTarget.dataset.text
+    this.setData({ keyword: tag })
     this.search()
   },
 
   goToCompare: function (e) {
-    const fruitId = e.currentTarget.dataset.id
-    const fruitName = e.currentTarget.dataset.name
+    var fruitId = e.currentTarget.dataset.id
+    var fruitName = e.currentTarget.dataset.name
 
     this.setData({
       selectedFruit: fruitName,
-      showPrices: true
+      showPrices: true,
+      currentPrices: []
     })
 
     wx.request({
-      url: `${app.globalData.baseUrl}/prices/${fruitId}`,
+      url: app.globalData.baseUrl + '/prices/' + fruitId,
+      timeout: 8000,
       success: (res) => {
-        this.setData({
-          currentPrices: res.data
-        })
+        this.setData({ currentPrices: res.data })
       },
       fail: () => {
-        wx.showToast({
-          title: '获取价格失败',
-          icon: 'none'
-        })
+        wx.showToast({ title: '获取价格失败', icon: 'none' })
       }
     })
-  },
-
-  getEmoji: function (fruitName) {
-    const emojis = {
-      '苹果': '🍎',
-      '香蕉': '🍌',
-      '橙子': '🍊',
-      '西瓜': '🍉',
-      '葡萄': '🍇',
-      '草莓': '🍓',
-      '芒果': '🥭',
-      '榴莲': '🫐',
-      '蓝莓': '🫐',
-      '樱桃': '🍒'
-    }
-    return emojis[fruitName] || '🍎'
   }
 })

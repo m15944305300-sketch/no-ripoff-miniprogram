@@ -19,9 +19,10 @@ Page({
   getFruits: function () {
     this.setData({ loading: true, loadFailed: false })
     wx.request({
-      url: `${app.globalData.baseUrl}/fruits/`,
+      url: app.globalData.baseUrl + '/fruits/',
+      timeout: 8000,
       success: (res) => {
-        const fruits = res.data.map(f => ({
+        var fruits = res.data.map(f => ({
           ...f,
           selected: false
         }))
@@ -81,24 +82,32 @@ Page({
       return
     }
 
-    const fruitNames = this.data.selectedFruits.join(',')
+    var fruitNames = this.data.selectedFruits.join(',')
 
     wx.showLoading({ title: '对比中...' })
 
     wx.request({
-      url: `${app.globalData.baseUrl}/price-compare/`,
-      data: {
-        fruit_names: fruitNames
-      },
+      url: app.globalData.baseUrl + '/price-compare/',
+      data: { fruit_names: fruitNames },
+      timeout: 10000,
       success: (res) => {
         wx.hideLoading()
-        const results = res.data
-        const compareData = []
-        const storePrices = {}
+        var results = res.data
+        var compareData = []
+        var storePrices = {}
 
         for (var key in results) {
           var prices = results[key]
-          if (prices.error) continue
+          // 跳过无价格数据的水果
+          if (!prices || prices.error || prices.length === 0) {
+            compareData.push({
+              fruit: key,
+              best_store: '暂无数据',
+              best_price: null,
+              best_grade: ''
+            })
+            continue
+          }
 
           var bestPrice = prices[0]
           compareData.push({

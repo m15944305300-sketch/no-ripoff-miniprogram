@@ -76,23 +76,31 @@
   color: #ff6b6b;
 }
 
-.fruit-scroll {
-  white-space: nowrap;
+.fruit-count {
+  font-size: 24rpx;
+  color: #999;
 }
 
-.fruit-list {
-  display: inline-flex;
-  gap: 20rpx;
+/* 全部水果网格布局 */
+.fruit-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
 }
 
 .fruit-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20rpx;
+  padding: 16rpx 8rpx;
   background: #f8f9fa;
   border-radius: 16rpx;
-  min-width: 120rpx;
+  width: calc(25% - 12rpx);  /* 每行4个 */
+  box-sizing: border-box;
+}
+
+.fruit-hover {
+  background: #ffe0e0;
 }
 
 .fruit-icon {
@@ -101,8 +109,14 @@
 }
 
 .fruit-name {
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #333;
+  margin-bottom: 4rpx;
+}
+
+.fruit-category {
+  font-size: 18rpx;
+  color: #bbb;
 }
 
 .price-item {

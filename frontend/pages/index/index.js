@@ -18,11 +18,10 @@ Page({
   getLocation: function () {
     var that = this
     wx.request({
-      url: app.globalData.baseUrl.replace('/api', '') + '/api/locate/',
+      url: app.globalData.baseUrl + '/locate/',
+      timeout: 5000,
       success: function (res) {
-        that.setData({
-          location: res.data.city
-        })
+        that.setData({ location: res.data.city })
       },
       fail: function () {
         that.setData({ location: '延吉市' })
@@ -33,7 +32,8 @@ Page({
   getFruits: function () {
     this.setData({ loading: true, loadFailed: false })
     wx.request({
-      url: `${app.globalData.baseUrl}/fruits/`,
+      url: app.globalData.baseUrl + '/fruits/',
+      timeout: 8000,
       success: (res) => {
         this.setData({
           fruits: res.data,
@@ -56,10 +56,14 @@ Page({
     const fruitId = e.currentTarget.dataset.id
     const fruitName = e.currentTarget.dataset.name
 
-    this.setData({ selectedFruit: fruitName })
+    this.setData({
+      selectedFruit: fruitName,
+      currentPrices: []
+    })
 
     wx.request({
-      url: `${app.globalData.baseUrl}/prices/${fruitId}`,
+      url: app.globalData.baseUrl + '/prices/' + fruitId,
+      timeout: 8000,
       success: (res) => {
         this.setData({ currentPrices: res.data })
       },

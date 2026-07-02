@@ -36,7 +36,7 @@
       <text class="card-title">热门搜索</text>
     </view>
     <view class="hot-tags">
-      <text class="hot-tag" wx:for="{{hotFruits}}" wx:key="*this" bindtap="searchTag">{{item}}</text>
+      <text class="hot-tag" wx:for="{{hotFruits}}" wx:key="*this" bindtap="searchTag" data-text="{{item}}">{{item}}</text>
     </view>
   </view>
 
@@ -79,5 +79,12 @@
       <text class="best-label">最低价：</text>
       <text class="best-value">¥{{currentPrices[0].price}}/{{currentPrices[0].unit}} ({{currentPrices[0].store_name}})</text>
     </view>
+  </view>
+
+  <view wx:if="{{showPrices && currentPrices.length === 0}}" class="card">
+    <view class="card-header">
+      <text class="card-title">{{selectedFruit}} - 价格对比</text>
+    </view>
+    <text class="empty-text">{{selectedFruit}}今日暂无价格数据</text>
   </view>
 </view>

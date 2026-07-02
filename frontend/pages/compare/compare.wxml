@@ -43,12 +43,14 @@
         <view class="table-row" wx:for="{{compareData}}" wx:key="fruit">
           <text class="td-fruit">{{helper.getEmoji(item.fruit)}} {{item.fruit}}</text>
           <text class="td-store">{{item.best_store}}</text>
-          <text class="td-price">¥{{item.best_price}}</text>
-          <text class="td-grade grade-tag grade-{{helper.gradeShort(item.best_grade)}}">{{item.best_grade}}</text>
+          <text wx:if="{{item.best_price}}" class="td-price">¥{{item.best_price}}</text>
+          <text wx:else class="td-price td-no-price">—</text>
+          <text wx:if="{{item.best_grade}}" class="td-grade grade-tag grade-{{helper.gradeShort(item.best_grade)}}">{{item.best_grade}}</text>
+          <text wx:else class="td-grade"></text>
         </view>
       </view>
     </view>
-    <view class="total-info">
+    <view class="total-info" wx:if="{{bestStore}}">
       <text class="total-label">购买建议：</text>
       <text class="total-value">去 {{bestStore}} 购买最划算</text>
     </view>
