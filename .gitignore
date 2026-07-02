@@ -23,5 +23,11 @@ env/
 .DS_Store
 Thumbs.db
 
-# 环境变量（按需保留）
-# .env
+# 环境变量
+.env
+
+# 微信开发者工具临时文件
+project.private.config.json
+
+# node_modules（云函数依赖）
+node_modules/

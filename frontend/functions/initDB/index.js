@@ -60,24 +60,34 @@ const STORES = [
 
 exports.main = async (event, context) => {
   try {
-    // 清空旧数据
-    await db.collection('fruits').where({}).remove()
-    await db.collection('stores').where({}).remove()
-
-    // 插入水果
-    for (var i = 0; i < FRUITS.length; i += 10) {
-      await db.collection('fruits').add(FRUITS.slice(i, i + 10))
+    // 清空旧数据（云开发要求非空查询条件）
+    var oldFruits = await db.collection('fruits').get()
+    for (var k = 0; k < oldFruits.data.length; k++) {
+      await db.collection('fruits').doc(oldFruits.data[k]._id).remove()
+    }
+    var oldStores = await db.collection('stores').get()
+    for (var m = 0; m < oldStores.data.length; m++) {
+      await db.collection('stores').doc(oldStores.data[m]._id).remove()
     }
 
-    // 插入商超
-    for (var j = 0; j < STORES.length; j += 10) {
-      await db.collection('stores').add(STORES.slice(j, j + 10))
+    // 插入水果：逐条插入（云开发add只能一次插入一条）
+    var fruitCount = 0
+    for (var i = 0; i < FRUITS.length; i++) {
+      await db.collection('fruits').add(FRUITS[i])
+      fruitCount++
+    }
+
+    // 插入商超：逐条插入
+    var storeCount = 0
+    for (var j = 0; j < STORES.length; j++) {
+      await db.collection('stores').add(STORES[j])
+      storeCount++
     }
 
     return {
       success: true,
-      fruits: FRUITS.length,
-      stores: STORES.length,
+      fruits: fruitCount,
+      stores: storeCount,
       message: '数据库初始化完成！请运行 crawlPrices 云函数生成价格数据'
     }
   } catch (err) {

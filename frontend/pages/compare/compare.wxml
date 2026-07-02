@@ -20,7 +20,7 @@
       <view class="retry-btn" bindtap="getFruits">点击重试</view>
     </view>
     <view wx:else class="fruit-grid">
-      <view class="fruit-item {{item.name === selectedFruit ? 'fruit-selected' : ''}}" wx:for="{{fruits}}" wx:key="*this" bindtap="selectFruit" data-id="{{item.id}}" data-name="{{item.name}}" hover-class="fruit-hover">
+      <view class="fruit-item {{item.name === selectedFruit ? 'fruit-selected' : ''}}" wx:for="{{fruits}}" wx:key="id" bindtap="selectFruit" data-id="{{item.id}}" data-name="{{item.name}}" hover-class="fruit-hover">
         <text class="fruit-emoji">{{helper.getEmoji(item.name)}}</text>
         <text class="fruit-name">{{item.name}}</text>
       </view>
