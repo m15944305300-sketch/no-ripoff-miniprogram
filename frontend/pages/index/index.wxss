@@ -1,223 +1,127 @@
-/* 定位栏 */
+/* 容器 */
+.container {
+  padding: 0 12rpx;
+}
+
+/* 定位栏 - 更紧凑 */
 .location-bar {
   display: flex;
   align-items: center;
-  padding: 12rpx 20rpx;
+  padding: 8rpx 16rpx;
   background: #fff3e0;
-  border-radius: 8rpx;
-  margin-bottom: 16rpx;
-}
-
-.location-icon {
-  font-size: 28rpx;
-  margin-right: 8rpx;
-}
-
-.location-text {
-  font-size: 26rpx;
-  color: #e65100;
-  font-weight: 500;
-}
-
-/* 商超名称行 */
-.store-name-row {
-  display: flex;
-  align-items: center;
-}
-
-/* 周边县市标签 */
-.region-tag {
-  display: inline-block;
-  padding: 2rpx 10rpx;
-  background: #e3f2fd;
-  color: #1976d2;
-  font-size: 18rpx;
   border-radius: 6rpx;
-  margin-left: 8rpx;
+  margin-bottom: 8rpx;
 }
+.location-icon { font-size: 24rpx; margin-right: 6rpx; }
+.location-text { font-size: 22rpx; color: #e65100; font-weight: 500; }
 
+/* 标题 - 极致紧凑 */
 .header {
   text-align: center;
-  padding: 40rpx 0;
+  padding: 16rpx 0;
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-  border-radius: 0 0 32rpx 32rpx;
-  margin: -20rpx -20rpx 20rpx -20rpx;
+  border-radius: 0 0 20rpx 20rpx;
+  margin: 0 -12rpx 10rpx -12rpx;
 }
+.title { font-size: 32rpx; font-weight: bold; color: white; display: block; }
+.subtitle { font-size: 20rpx; color: rgba(255,255,255,0.8); display: block; }
 
-.title {
-  font-size: 44rpx;
-  font-weight: bold;
-  color: white;
-  display: block;
-}
+/* 卡片 */
+.card { background: white; border-radius: 12rpx; padding: 12rpx 16rpx; margin-bottom: 10rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04); }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8rpx; }
+.card-title { font-size: 26rpx; font-weight: bold; color: #333; }
+.card-more { font-size: 20rpx; color: #ff6b6b; }
+.fruit-count { font-size: 20rpx; color: #999; }
 
-.subtitle {
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.8);
-  margin-top: 8rpx;
-  display: block;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20rpx;
-}
-
-.card-title {
-  font-size: 30rpx;
-  font-weight: bold;
-  color: #333;
-}
-
-.card-more {
-  font-size: 24rpx;
-  color: #ff6b6b;
-}
-
-.fruit-count {
-  font-size: 24rpx;
-  color: #999;
-}
-
-/* 全部水果网格布局 */
+/* 全部水果 - 5列紧凑网格 */
 .fruit-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 16rpx;
+  gap: 6rpx;
 }
-
 .fruit-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16rpx 8rpx;
+  justify-content: center;
+  padding: 8rpx 2rpx;
   background: #f8f9fa;
-  border-radius: 16rpx;
-  width: calc(25% - 12rpx);  /* 每行4个 */
+  border-radius: 10rpx;
+  width: calc(20% - 4.8rpx);  /* 5列 */
   box-sizing: border-box;
+  min-height: 72rpx;
 }
+.fruit-hover { background: #ffe0e0; }
+.fruit-emoji { font-size: 28rpx; line-height: 1.2; }
+.fruit-name { font-size: 18rpx; color: #333; line-height: 1.2; margin-top: 2rpx; }
 
-.fruit-hover {
-  background: #ffe0e0;
-}
-
-.fruit-icon {
-  font-size: 48rpx;
-  margin-bottom: 8rpx;
-}
-
-.fruit-name {
-  font-size: 22rpx;
-  color: #333;
-  margin-bottom: 4rpx;
-}
-
-.fruit-category {
-  font-size: 18rpx;
-  color: #bbb;
+/* 实时价格对比 */
+.store-name-row { display: flex; align-items: center; }
+.region-tag {
+  display: inline-block;
+  padding: 1rpx 8rpx;
+  background: #e3f2fd;
+  color: #1976d2;
+  font-size: 16rpx;
+  border-radius: 4rpx;
+  margin-left: 6rpx;
 }
 
 .price-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20rpx 0;
+  padding: 12rpx 0;
   border-bottom: 1rpx solid #f0f0f0;
 }
+.price-item:last-child { border-bottom: none; }
+.price-left { flex: 1; min-width: 0; }
+.store-name { font-size: 24rpx; color: #333; display: block; }
+.store-type { font-size: 18rpx; color: #999; margin-top: 2rpx; display: block; }
+.price-right { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
+.price-value { font-size: 30rpx; font-weight: bold; color: #ff6b6b; }
 
-.price-item:last-child {
-  border-bottom: none;
-}
-
-.store-name {
-  font-size: 28rpx;
-  color: #333;
-  display: block;
-}
-
-.store-type {
-  font-size: 22rpx;
-  color: #999;
+/* 等级标签 */
+.grade-tag {
+  font-size: 18rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 6rpx;
+  color: white;
   margin-top: 4rpx;
-  display: block;
 }
+.grade-A { background: #ff6b6b; }
+.grade-B { background: #ff9800; }
+.grade-C { background: #999; }
 
-.price-value {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #ff6b6b;
+/* 等级说明 - 行内紧凑 */
+.grade-legend {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16rpx;
+  padding: 8rpx 0;
+  margin-bottom: 4rpx;
+  border-bottom: 1rpx dashed #eee;
 }
+.legend-item { display: flex; align-items: center; }
+.legend-desc { font-size: 18rpx; color: #888; margin-left: 4rpx; }
 
-.empty-text {
-  text-align: center;
-  color: #999;
-  padding: 40rpx;
-  font-size: 26rpx;
-}
+/* 空状态 */
+.empty-text { text-align: center; color: #999; padding: 16rpx; font-size: 22rpx; }
 
 /* 重试按钮 */
 .retry-btn {
   display: inline-block;
-  margin-top: 16rpx;
-  padding: 16rpx 48rpx;
+  margin-top: 10rpx;
+  padding: 10rpx 36rpx;
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
   color: white;
-  border-radius: 32rpx;
-  font-size: 26rpx;
-}
-
-/* 等级说明 */
-.grade-legend {
-  background: #f8f9fa;
-  border-radius: 12rpx;
-  padding: 16rpx 20rpx;
-  margin-bottom: 20rpx;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8rpx;
-}
-
-.legend-item:last-child {
-  margin-bottom: 0;
-}
-
-.legend-desc {
-  font-size: 20rpx;
-  color: #888;
-  margin-left: 12rpx;
+  border-radius: 24rpx;
+  font-size: 22rpx;
 }
 
 /* 使用指南 */
-.guide-list {
-  display: flex;
-  justify-content: space-around;
-}
-
-.guide-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16rpx 24rpx;
-  border-radius: 12rpx;
-  transition: background 0.2s;
-}
-
-/* 点击反馈 */
-.guide-hover {
-  background: #f0f0f0;
-}
-
-.guide-icon {
-  font-size: 40rpx;
-  margin-bottom: 8rpx;
-}
-
-.guide-text {
-  font-size: 22rpx;
-  color: #666;
-}
+.guide-list { display: flex; justify-content: space-around; }
+.guide-item { display: flex; flex-direction: column; align-items: center; padding: 8rpx 16rpx; border-radius: 8rpx; }
+.guide-hover { background: #f0f0f0; }
+.guide-icon { font-size: 32rpx; }
+.guide-text { font-size: 18rpx; color: #666; margin-top: 2rpx; }
