@@ -1,58 +1,76 @@
 <wxs src="../../utils/helper.wxs" module="helper" />
 <view class="container">
-  <view class="card">
-    <view class="card-header">
-      <text class="card-title">添加水果对比</text>
+  <view class="header">
+    <view class="header-top">
+      <text class="location-icon">📍</text>
+      <text class="location-text">{{location}}</text>
     </view>
-    <!-- 加载中 -->
+    <text class="title">价格走势</text>
+    <text class="subtitle">同果同店 · 昨今对比</text>
+  </view>
+
+  <view class="card card-fruit">
+    <view class="card-header">
+      <text class="card-title">选择水果</text>
+      <text class="fruit-count" wx:if="{{selectedFruit}}">{{selectedFruit}}</text>
+    </view>
     <view wx:if="{{loading}}" class="empty-text">加载中...</view>
-    <!-- 加载失败 -->
     <view wx:elif="{{loadFailed}}" class="empty-text">
       <text>数据加载失败</text>
       <view class="retry-btn" bindtap="getFruits">点击重试</view>
     </view>
-    <!-- 正常显示 -->
-    <view wx:else>
-      <view class="fruit-grid">
-        <view class="fruit-option {{item.selected ? 'selected' : ''}}" wx:for="{{fruits}}" wx:key="*this" bindtap="toggleFruit" data-id="{{item.id}}" data-name="{{item.name}}">
-          <view class="fruit-icon">{{helper.getEmoji(item.name)}}</view>
-          <text class="fruit-name">{{item.name}}</text>
-          <view class="checkbox" wx:if="{{item.selected}}">✓</view>
-        </view>
+    <view wx:else class="fruit-grid">
+      <view class="fruit-item {{item.name === selectedFruit ? 'fruit-selected' : ''}}" wx:for="{{fruits}}" wx:key="*this" bindtap="selectFruit" data-id="{{item.id}}" data-name="{{item.name}}" hover-class="fruit-hover">
+        <text class="fruit-emoji">{{helper.getEmoji(item.name)}}</text>
+        <text class="fruit-name">{{item.name}}</text>
       </view>
-      <button class="compare-btn" bindtap="compare" wx:if="{{selectedFruits.length > 0}}">
-        对比 {{selectedFruits.length}} 种水果
-      </button>
-      <text class="tip-text" wx:else>请选择至少一种水果进行对比</text>
     </view>
   </view>
 
-  <view wx:if="{{hasResults}}" class="card">
+  <view class="card card-trend" wx:if="{{trendData.length > 0}}">
     <view class="card-header">
-      <text class="card-title">价格对比结果</text>
-      <button class="clear-btn" bindtap="clearSelection">清空</button>
+      <text class="card-title">{{selectedFruit}} · 价格走势</text>
     </view>
-    <view class="compare-table">
-      <view class="table-header">
-        <text class="th-fruit">水果</text>
-        <text class="th-store">最低价商超</text>
-        <text class="th-price">价格</text>
-        <text class="th-grade">等级</text>
-      </view>
-      <view class="table-body">
-        <view class="table-row" wx:for="{{compareData}}" wx:key="*this">
-          <text class="td-fruit">{{helper.getEmoji(item.fruit)}} {{item.fruit}}</text>
-          <text class="td-store">{{item.best_store}}</text>
-          <text wx:if="{{item.best_price}}" class="td-price">¥{{item.best_price}}</text>
-          <text wx:else class="td-price td-no-price">—</text>
-          <text wx:if="{{item.best_grade}}" class="td-grade grade-tag grade-{{helper.gradeShort(item.best_grade)}}">{{item.best_grade}}</text>
-          <text wx:else class="td-grade"></text>
+    <view class="trend-summary">
+      <text class="summary-text">共 {{trendData.length}} 家商超 | 降价 {{downCount}} 家 | 涨价 {{upCount}} 家</text>
+    </view>
+    <view class="trend-list">
+      <view class="trend-item" wx:for="{{trendData}}" wx:key="*this">
+        <view class="trend-left">
+          <view class="store-name-row">
+            <text class="store-name">{{item.store_name}}</text>
+            <text wx:if="{{helper.isExternal(item.region)}}" class="region-tag">{{item.region}}</text>
+          </view>
+          <text class="store-type">{{item.store_type}} · {{item.source_type}}</text>
+        </view>
+        <view class="trend-right">
+          <view class="trend-price">
+            <text class="price-today">¥{{item.today_price}}</text>
+            <text wx:if="{{item.yesterday_price}}" class="price-yesterday">昨 ¥{{item.yesterday_price}}</text>
+          </view>
+          <view wx:if="{{item.change !== null}}" class="trend-change {{item.change < 0 ? 'down' : item.change > 0 ? 'up' : 'flat'}}">
+            <text wx:if="{{item.change < 0}}" class="change-arrow">▼</text>
+            <text wx:elif="{{item.change > 0}}" class="change-arrow">▲</text>
+            <text wx:else class="change-arrow">—</text>
+            <text class="change-text">{{item.change < 0 ? '' : '+'}}{{item.change}}</text>
+            <text class="change-pct">({{item.change_pct}}%)</text>
+          </view>
+          <text wx:else class="trend-no-data">无历史</text>
         </view>
       </view>
     </view>
-    <view class="total-info" wx:if="{{bestStore}}">
-      <text class="total-label">购买建议：</text>
-      <text class="total-value">去 {{bestStore}} 购买最划算</text>
+  </view>
+
+  <view class="card card-trend" wx:elif="{{selectedFruit && trendData.length === 0}}">
+    <text class="empty-text">该水果今日暂无价格数据</text>
+  </view>
+
+  <view class="guide-row">
+    <view class="guide-item" bindtap="goHome" hover-class="guide-hover">
+      <text class="guide-icon">🏠</text><text class="guide-text">首页</text>
+    </view>
+    <view class="guide-item" bindtap="goSearch" hover-class="guide-hover">
+      <text class="guide-icon">🔍</text><text class="guide-text">搜索</text>
     </view>
   </view>
 </view>
