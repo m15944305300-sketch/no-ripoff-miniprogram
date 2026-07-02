@@ -22,7 +22,7 @@
       <view class="retry-btn" bindtap="getFruits">点击重试</view>
     </view>
     <view wx:else class="fruit-grid">
-      <view class="fruit-item" wx:for="{{fruits}}" wx:key="id" bindtap="goToCompare" data-id="{{item.id}}" data-name="{{item.name}}" hover-class="fruit-hover">
+      <view class="fruit-item" wx:for="{{fruits}}" wx:key="*this" bindtap="goToCompare" data-id="{{item.id}}" data-name="{{item.name}}" hover-class="fruit-hover">
         <view class="fruit-icon">{{helper.getEmoji(item.name)}}</view>
         <text class="fruit-name">{{item.name}}</text>
         <text class="fruit-category">{{item.category}}</text>
@@ -51,7 +51,7 @@
       </view>
     </view>
     <view wx:if="{{currentPrices.length > 0}}">
-      <view class="price-item" wx:for="{{currentPrices}}" wx:key="store_id">
+      <view class="price-item" wx:for="{{currentPrices}}" wx:key="*this">
         <view class="price-left">
           <view class="store-name-row">
             <text class="store-name">{{item.store_name}}</text>

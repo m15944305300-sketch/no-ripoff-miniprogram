@@ -21,7 +21,9 @@ Page({
       url: app.globalData.baseUrl + '/locate/',
       timeout: 5000,
       success: function (res) {
-        that.setData({ location: res.data.city })
+        if (res.data && res.data.city) {
+          that.setData({ location: res.data.city })
+        }
       },
       fail: function () {
         that.setData({ location: '延吉市' })
@@ -48,10 +50,21 @@ Page({
       data: { keyword: keyword },
       timeout: 8000,
       success: (res) => {
-        this.setData({
-          searchResults: res.data,
-          showPrices: false
-        })
+        if (res.data && Array.isArray(res.data)) {
+          // 去重保护
+          var seen = {}
+          var results = res.data.filter(function (f) {
+            if (!f || !f.id || seen[f.id]) return false
+            seen[f.id] = true
+            return true
+          })
+          this.setData({
+            searchResults: results,
+            showPrices: false
+          })
+        } else {
+          this.setData({ searchResults: [], showPrices: false })
+        }
       },
       fail: () => {
         wx.showToast({ title: '搜索失败', icon: 'none' })
@@ -79,7 +92,9 @@ Page({
       url: app.globalData.baseUrl + '/prices/' + fruitId,
       timeout: 8000,
       success: (res) => {
-        this.setData({ currentPrices: res.data })
+        if (res.data && Array.isArray(res.data)) {
+          this.setData({ currentPrices: res.data })
+        }
       },
       fail: () => {
         wx.showToast({ title: '获取价格失败', icon: 'none' })

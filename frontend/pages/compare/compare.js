@@ -16,21 +16,43 @@ Page({
     this.getFruits()
   },
 
+  onShow: function () {
+    if (this.data.fruits.length === 0 && !this.data.loading) {
+      this.getFruits()
+    }
+  },
+
   getFruits: function () {
+    if (this.data.loading) return
+
     this.setData({ loading: true, loadFailed: false })
     wx.request({
       url: app.globalData.baseUrl + '/fruits/',
       timeout: 8000,
       success: (res) => {
-        var fruits = res.data.map(f => ({
-          ...f,
-          selected: false
-        }))
-        this.setData({
-          fruits: fruits,
-          loading: false,
-          loadFailed: false
-        })
+        if (res.data && Array.isArray(res.data)) {
+          // 去重保护
+          var seen = {}
+          var fruits = res.data.filter(function (f) {
+            if (!f || !f.id || seen[f.id]) return false
+            seen[f.id] = true
+            return true
+          }).map(function (f) {
+            return {
+              id: f.id,
+              name: f.name,
+              category: f.category,
+              selected: false
+            }
+          })
+          this.setData({
+            fruits: fruits,
+            loading: false,
+            loadFailed: false
+          })
+        } else {
+          this.setData({ loading: false, loadFailed: true })
+        }
       },
       fail: () => {
         this.setData({ loading: false, loadFailed: true })
@@ -44,41 +66,34 @@ Page({
   },
 
   toggleFruit: function (e) {
-    const fruitName = e.currentTarget.dataset.name
-    const selectedFruits = this.data.selectedFruits
-    const fruits = this.data.fruits.map(f => {
+    var fruitName = e.currentTarget.dataset.name
+    var selectedFruits = this.data.selectedFruits
+    var fruits = this.data.fruits.map(function (f) {
       if (f.name === fruitName) {
-        return { ...f, selected: !f.selected }
+        return { id: f.id, name: f.name, category: f.category, selected: !f.selected }
       }
       return f
     })
 
-    if (selectedFruits.includes(fruitName)) {
-      this.setData({
-        fruits: fruits,
-        selectedFruits: selectedFruits.filter(f => f !== fruitName)
-      })
+    var idx = selectedFruits.indexOf(fruitName)
+    if (idx > -1) {
+      // 已选 -> 取消
+      selectedFruits.splice(idx, 1)
+      this.setData({ fruits: fruits, selectedFruits: selectedFruits })
     } else {
+      // 未选 -> 添加
       if (selectedFruits.length >= 5) {
-        wx.showToast({
-          title: '最多选择5种水果',
-          icon: 'none'
-        })
+        wx.showToast({ title: '最多选择5种水果', icon: 'none' })
         return
       }
-      this.setData({
-        fruits: fruits,
-        selectedFruits: [...selectedFruits, fruitName]
-      })
+      selectedFruits.push(fruitName)
+      this.setData({ fruits: fruits, selectedFruits: selectedFruits })
     }
   },
 
   compare: function () {
     if (this.data.selectedFruits.length === 0) {
-      wx.showToast({
-        title: '请选择水果',
-        icon: 'none'
-      })
+      wx.showToast({ title: '请选择水果', icon: 'none' })
       return
     }
 
@@ -92,13 +107,16 @@ Page({
       timeout: 10000,
       success: (res) => {
         wx.hideLoading()
+        if (!res.data) {
+          wx.showToast({ title: '对比失败', icon: 'none' })
+          return
+        }
         var results = res.data
         var compareData = []
         var storePrices = {}
 
         for (var key in results) {
           var prices = results[key]
-          // 跳过无价格数据的水果
           if (!prices || prices.error || prices.length === 0) {
             compareData.push({
               fruit: key,
@@ -144,16 +162,15 @@ Page({
       },
       fail: () => {
         wx.hideLoading()
-        wx.showToast({
-          title: '对比失败，请检查网络',
-          icon: 'none'
-        })
+        wx.showToast({ title: '对比失败，请检查网络', icon: 'none' })
       }
     })
   },
 
   clearSelection: function () {
-    var fruits = this.data.fruits.map(f => ({ ...f, selected: false }))
+    var fruits = this.data.fruits.map(function (f) {
+      return { id: f.id, name: f.name, category: f.category, selected: false }
+    })
     this.setData({
       fruits: fruits,
       selectedFruits: [],

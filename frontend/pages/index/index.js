@@ -15,13 +15,22 @@ Page({
     this.getFruits()
   },
 
+  onShow: function () {
+    // 如果水果列表为空，重新加载（tab切换回来时）
+    if (this.data.fruits.length === 0 && !this.data.loading) {
+      this.getFruits()
+    }
+  },
+
   getLocation: function () {
     var that = this
     wx.request({
       url: app.globalData.baseUrl + '/locate/',
       timeout: 5000,
       success: function (res) {
-        that.setData({ location: res.data.city })
+        if (res.data && res.data.city) {
+          that.setData({ location: res.data.city })
+        }
       },
       fail: function () {
         that.setData({ location: '延吉市' })
@@ -30,16 +39,30 @@ Page({
   },
 
   getFruits: function () {
+    // 防止重复调用
+    if (this.data.loading) return
+
     this.setData({ loading: true, loadFailed: false })
     wx.request({
       url: app.globalData.baseUrl + '/fruits/',
       timeout: 8000,
       success: (res) => {
-        this.setData({
-          fruits: res.data,
-          loading: false,
-          loadFailed: false
-        })
+        if (res.data && Array.isArray(res.data)) {
+          // 确保每项都有唯一key，去重保护
+          var seen = {}
+          var fruits = res.data.filter(function (f) {
+            if (!f || !f.id || seen[f.id]) return false
+            seen[f.id] = true
+            return true
+          })
+          this.setData({
+            fruits: fruits,
+            loading: false,
+            loadFailed: false
+          })
+        } else {
+          this.setData({ loading: false, loadFailed: true })
+        }
       },
       fail: () => {
         this.setData({ loading: false, loadFailed: true })
@@ -53,8 +76,8 @@ Page({
   },
 
   goToCompare: function (e) {
-    const fruitId = e.currentTarget.dataset.id
-    const fruitName = e.currentTarget.dataset.name
+    var fruitId = e.currentTarget.dataset.id
+    var fruitName = e.currentTarget.dataset.name
 
     this.setData({
       selectedFruit: fruitName,
@@ -65,7 +88,9 @@ Page({
       url: app.globalData.baseUrl + '/prices/' + fruitId,
       timeout: 8000,
       success: (res) => {
-        this.setData({ currentPrices: res.data })
+        if (res.data && Array.isArray(res.data)) {
+          this.setData({ currentPrices: res.data })
+        }
       },
       fail: () => {
         wx.showToast({ title: '获取价格失败', icon: 'none' })
@@ -74,7 +99,7 @@ Page({
   },
 
   guideTap: function (e) {
-    const action = e.currentTarget.dataset.action
+    var action = e.currentTarget.dataset.action
     if (action === 'search') {
       wx.switchTab({ url: '/pages/search/search' })
     } else if (action === 'compare') {

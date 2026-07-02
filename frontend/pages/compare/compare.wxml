@@ -14,7 +14,7 @@
     <!-- 正常显示 -->
     <view wx:else>
       <view class="fruit-grid">
-        <view class="fruit-option {{item.selected ? 'selected' : ''}}" wx:for="{{fruits}}" wx:key="id" bindtap="toggleFruit" data-id="{{item.id}}" data-name="{{item.name}}">
+        <view class="fruit-option {{item.selected ? 'selected' : ''}}" wx:for="{{fruits}}" wx:key="*this" bindtap="toggleFruit" data-id="{{item.id}}" data-name="{{item.name}}">
           <view class="fruit-icon">{{helper.getEmoji(item.name)}}</view>
           <text class="fruit-name">{{item.name}}</text>
           <view class="checkbox" wx:if="{{item.selected}}">✓</view>
@@ -40,7 +40,7 @@
         <text class="th-grade">等级</text>
       </view>
       <view class="table-body">
-        <view class="table-row" wx:for="{{compareData}}" wx:key="fruit">
+        <view class="table-row" wx:for="{{compareData}}" wx:key="*this">
           <text class="td-fruit">{{helper.getEmoji(item.fruit)}} {{item.fruit}}</text>
           <text class="td-store">{{item.best_store}}</text>
           <text wx:if="{{item.best_price}}" class="td-price">¥{{item.best_price}}</text>
