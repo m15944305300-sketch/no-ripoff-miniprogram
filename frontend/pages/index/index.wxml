@@ -1,11 +1,10 @@
 <wxs src="../../utils/helper.wxs" module="helper" />
 <view class="container">
-  <view class="location-bar">
-    <text class="location-icon">📍</text>
-    <text class="location-text">{{location}}</text>
-  </view>
-
   <view class="header">
+    <view class="header-top">
+      <text class="location-icon">📍</text>
+      <text class="location-text">{{location}}</text>
+    </view>
     <text class="title">水果价格助手</text>
     <text class="subtitle">帮你买水果不被宰</text>
   </view>
@@ -28,12 +27,12 @@
     </view>
   </view>
 
-  <view class="card card-price">
+  <!-- 选水果后才显示价格，否则不占空间 -->
+  <view class="card card-price" wx:if="{{selectedFruit}}">
     <view class="card-header">
-      <text class="card-title">实时价格对比</text>
-      <text class="card-more" wx:if="{{selectedFruit}}">{{selectedFruit}}</text>
+      <text class="card-title">{{selectedFruit}} · 价格对比</text>
     </view>
-    <view wx:if="{{selectedFruit && currentPrices.length > 0}}" class="grade-legend">
+    <view wx:if="{{currentPrices.length > 0}}" class="grade-legend">
       <text class="legend-item"><text class="grade-tag grade-A">A级</text><text class="legend-desc">优质品</text></text>
       <text class="legend-item"><text class="grade-tag grade-B">B级</text><text class="legend-desc">合格品</text></text>
       <text class="legend-item"><text class="grade-tag grade-C">C级</text><text class="legend-desc">普通品</text></text>
@@ -53,27 +52,19 @@
         </view>
       </view>
     </view>
-    <view wx:elif="{{selectedFruit}}" class="empty-text">该水果今日暂无价格数据</view>
-    <view wx:else class="empty-text">点击上方水果查看价格</view>
+    <view wx:else class="empty-text">该水果今日暂无价格数据</view>
   </view>
 
-  <view class="card card-guide">
-    <view class="card-header">
-      <text class="card-title">使用指南</text>
+  <!-- 使用指南：单行紧凑 -->
+  <view class="guide-row">
+    <view class="guide-item" bindtap="guideTap" data-action="search" hover-class="guide-hover">
+      <text class="guide-icon">🔍</text><text class="guide-text">搜索</text>
     </view>
-    <view class="guide-list">
-      <view class="guide-item" bindtap="guideTap" data-action="search" hover-class="guide-hover">
-        <text class="guide-icon">🔍</text>
-        <text class="guide-text">搜索</text>
-      </view>
-      <view class="guide-item" bindtap="guideTap" data-action="compare" hover-class="guide-hover">
-        <text class="guide-icon">📊</text>
-        <text class="guide-text">对比</text>
-      </view>
-      <view class="guide-item" bindtap="guideTap" data-action="buy" hover-class="guide-hover">
-        <text class="guide-icon">🛒</text>
-        <text class="guide-text">购买</text>
-      </view>
+    <view class="guide-item" bindtap="guideTap" data-action="compare" hover-class="guide-hover">
+      <text class="guide-icon">📊</text><text class="guide-text">对比</text>
+    </view>
+    <view class="guide-item" bindtap="guideTap" data-action="buy" hover-class="guide-hover">
+      <text class="guide-icon">🛒</text><text class="guide-text">购买</text>
     </view>
   </view>
 </view>
