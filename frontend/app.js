@@ -3,7 +3,7 @@ App({
     // 初始化云开发
     if (wx.cloud) {
       wx.cloud.init({
-        env: 'cloud1-0gkm1fee3b4d013e',
+        env: 'cloudbase-d8g6jxgthdd1f2afe',
         traceUser: true
       })
     }
@@ -13,7 +13,7 @@ App({
     // 云开发模式下无需 baseUrl，使用 wx.cloud.callFunction
     baseUrl: '',
     selectedFruits: [],
-    // 云开发环境ID（需在开通云开发后替换）
-    cloudEnv: 'cloud1-0gkm1fee3b4d013e'
+    // 云开发环境ID
+    cloudEnv: 'cloudbase-d8g6jxgthdd1f2afe'
   }
 })
