@@ -1,5 +1,11 @@
 <wxs src="../../utils/helper.wxs" module="helper" />
 <view class="container">
+  <!-- 定位栏 -->
+  <view class="location-bar">
+    <text class="location-icon">📍</text>
+    <text class="location-text">{{location}}</text>
+  </view>
+
   <view class="header">
     <text class="title">🍎 水果价格助手</text>
     <text class="subtitle">帮你买水果不被宰</text>
@@ -9,7 +15,12 @@
     <view class="card-header">
       <text class="card-title">今日热门水果</text>
     </view>
-    <scroll-view scroll-x class="fruit-scroll">
+    <view wx:if="{{loading}}" class="empty-text">加载中...</view>
+    <view wx:elif="{{loadFailed}}" class="empty-text">
+      <text>数据加载失败</text>
+      <view class="retry-btn" bindtap="getFruits">点击重试</view>
+    </view>
+    <scroll-view wx:else scroll-x class="fruit-scroll">
       <view class="fruit-list">
         <view class="fruit-item" wx:for="{{fruits}}" wx:key="id" bindtap="goToCompare" data-id="{{item.id}}" data-name="{{item.name}}">
           <view class="fruit-icon">{{helper.getEmoji(item.name)}}</view>
@@ -24,11 +35,29 @@
       <text class="card-title">实时价格对比</text>
       <text class="card-more">查看全部</text>
     </view>
+    <!-- 等级说明 -->
+    <view class="grade-legend">
+      <view class="legend-item">
+        <text class="grade-tag grade-A">A级</text>
+        <text class="legend-desc">优质品，果形端正、色泽好</text>
+      </view>
+      <view class="legend-item">
+        <text class="grade-tag grade-B">B级</text>
+        <text class="legend-desc">合格品，略有瑕疵但品质正常</text>
+      </view>
+      <view class="legend-item">
+        <text class="grade-tag grade-C">C级</text>
+        <text class="legend-desc">普通品，外观一般或临期处理</text>
+      </view>
+    </view>
     <view wx:if="{{currentPrices.length > 0}}">
       <view class="price-item" wx:for="{{currentPrices}}" wx:key="store_id">
         <view class="price-left">
-          <text class="store-name">{{item.store_name}}</text>
-          <text class="store-type">{{item.store_type}}</text>
+          <view class="store-name-row">
+            <text class="store-name">{{item.store_name}}</text>
+            <text wx:if="{{helper.isExternal(item.region)}}" class="region-tag">{{item.region}}</text>
+          </view>
+          <text class="store-type">{{item.store_type}} · {{item.source_type}}</text>
         </view>
         <view class="price-right">
           <text class="price-value">¥{{item.price}}/{{item.unit}}</text>
@@ -46,17 +75,17 @@
       <text class="card-title">使用指南</text>
     </view>
     <view class="guide-list">
-      <view class="guide-item">
+      <view class="guide-item" bindtap="guideTap" data-action="search" hover-class="guide-hover">
         <text class="guide-icon">🔍</text>
-        <text class="guide-text">搜索或选择水果</text>
+        <text class="guide-text">搜索水果</text>
       </view>
-      <view class="guide-item">
+      <view class="guide-item" bindtap="guideTap" data-action="compare" hover-class="guide-hover">
         <text class="guide-icon">📊</text>
-        <text class="guide-text">对比各商超价格</text>
+        <text class="guide-text">对比价格</text>
       </view>
-      <view class="guide-item">
+      <view class="guide-item" bindtap="guideTap" data-action="buy" hover-class="guide-hover">
         <text class="guide-icon">🛒</text>
-        <text class="guide-text">选择最低价购买</text>
+        <text class="guide-text">低价购买</text>
       </view>
     </view>
   </view>

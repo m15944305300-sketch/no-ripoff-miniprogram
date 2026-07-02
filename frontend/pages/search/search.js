@@ -7,7 +7,25 @@ Page({
     currentPrices: [],
     selectedFruit: '',
     showPrices: false,
-    hotFruits: ['苹果', '香蕉', '西瓜', '草莓', '葡萄', '芒果', '榴莲', '蓝莓']
+    hotFruits: ['苹果', '香蕉', '西瓜', '草莓', '葡萄', '芒果', '榴莲', '蓝莓', '苹果梨'],
+    location: '延吉市'
+  },
+
+  onLoad: function () {
+    this.getLocation()
+  },
+
+  getLocation: function () {
+    var that = this
+    wx.request({
+      url: app.globalData.baseUrl.replace('/api', '') + '/api/locate/',
+      success: function (res) {
+        that.setData({ location: res.data.city })
+      },
+      fail: function () {
+        that.setData({ location: '延吉市' })
+      }
+    })
   },
 
   onInput: function (e) {

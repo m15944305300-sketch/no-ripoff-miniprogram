@@ -65,6 +65,23 @@
   font-size: 26rpx;
 }
 
+.empty-text {
+  text-align: center;
+  color: #999;
+  padding: 40rpx;
+  font-size: 26rpx;
+}
+
+.retry-btn {
+  display: inline-block;
+  margin-top: 16rpx;
+  padding: 16rpx 48rpx;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+  color: white;
+  border-radius: 32rpx;
+  font-size: 26rpx;
+}
+
 .clear-btn {
   font-size: 24rpx;
   color: #999;

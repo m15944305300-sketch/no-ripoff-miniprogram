@@ -4,20 +4,30 @@
     <view class="card-header">
       <text class="card-title">添加水果对比</text>
     </view>
-    <view class="fruit-grid">
-      <view class="fruit-option {{item.selected ? 'selected' : ''}}" wx:for="{{fruits}}" wx:key="id" bindtap="toggleFruit" data-id="{{item.id}}" data-name="{{item.name}}">
-        <view class="fruit-icon">{{helper.getEmoji(item.name)}}</view>
-        <text class="fruit-name">{{item.name}}</text>
-        <view class="checkbox" wx:if="{{item.selected}}">✓</view>
-      </view>
+    <!-- 加载中 -->
+    <view wx:if="{{loading}}" class="empty-text">加载中...</view>
+    <!-- 加载失败 -->
+    <view wx:elif="{{loadFailed}}" class="empty-text">
+      <text>数据加载失败</text>
+      <view class="retry-btn" bindtap="getFruits">点击重试</view>
     </view>
-    <button class="compare-btn" bindtap="compare" wx:if="{{selectedFruits.length > 0}}">
-      对比 {{selectedFruits.length}} 种水果
-    </button>
-    <text class="tip-text" wx:else>请选择至少一种水果进行对比</text>
+    <!-- 正常显示 -->
+    <view wx:else>
+      <view class="fruit-grid">
+        <view class="fruit-option {{item.selected ? 'selected' : ''}}" wx:for="{{fruits}}" wx:key="id" bindtap="toggleFruit" data-id="{{item.id}}" data-name="{{item.name}}">
+          <view class="fruit-icon">{{helper.getEmoji(item.name)}}</view>
+          <text class="fruit-name">{{item.name}}</text>
+          <view class="checkbox" wx:if="{{item.selected}}">✓</view>
+        </view>
+      </view>
+      <button class="compare-btn" bindtap="compare" wx:if="{{selectedFruits.length > 0}}">
+        对比 {{selectedFruits.length}} 种水果
+      </button>
+      <text class="tip-text" wx:else>请选择至少一种水果进行对比</text>
+    </view>
   </view>
 
-  <view wx:if="{{compareResults && Object.keys(compareResults).length > 0}}" class="card">
+  <view wx:if="{{hasResults}}" class="card">
     <view class="card-header">
       <text class="card-title">价格对比结果</text>
       <button class="clear-btn" bindtap="clearSelection">清空</button>

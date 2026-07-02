@@ -6,7 +6,10 @@ Page({
     selectedFruits: [],
     compareResults: null,
     compareData: [],
-    bestStore: ''
+    bestStore: '',
+    hasResults: false,
+    loading: false,
+    loadFailed: false
   },
 
   onLoad: function () {
@@ -14,6 +17,7 @@ Page({
   },
 
   getFruits: function () {
+    this.setData({ loading: true, loadFailed: false })
     wx.request({
       url: `${app.globalData.baseUrl}/fruits/`,
       success: (res) => {
@@ -22,13 +26,17 @@ Page({
           selected: false
         }))
         this.setData({
-          fruits: fruits
+          fruits: fruits,
+          loading: false,
+          loadFailed: false
         })
       },
       fail: () => {
+        this.setData({ loading: false, loadFailed: true })
         wx.showToast({
-          title: '加载失败',
-          icon: 'none'
+          title: '网络连接失败，请检查后端服务',
+          icon: 'none',
+          duration: 2000
         })
       }
     })
@@ -75,40 +83,45 @@ Page({
 
     const fruitNames = this.data.selectedFruits.join(',')
 
+    wx.showLoading({ title: '对比中...' })
+
     wx.request({
       url: `${app.globalData.baseUrl}/price-compare/`,
       data: {
         fruit_names: fruitNames
       },
       success: (res) => {
+        wx.hideLoading()
         const results = res.data
         const compareData = []
         const storePrices = {}
 
-        for (const [fruit, prices] of Object.entries(results)) {
+        for (var key in results) {
+          var prices = results[key]
           if (prices.error) continue
 
-          const bestPrice = prices[0]
+          var bestPrice = prices[0]
           compareData.push({
-            fruit: fruit,
+            fruit: key,
             best_store: bestPrice.store,
             best_price: bestPrice.price,
             best_grade: bestPrice.grade
           })
 
-          for (const price of prices) {
-            if (!storePrices[price.store]) {
-              storePrices[price.store] = 0
+          for (var i = 0; i < prices.length; i++) {
+            var storeName = prices[i].store
+            if (!storePrices[storeName]) {
+              storePrices[storeName] = 0
             }
-            storePrices[price.store] += price.price
+            storePrices[storeName] += prices[i].price
           }
         }
 
-        let bestStore = ''
-        let minTotal = Infinity
-        for (const [store, total] of Object.entries(storePrices)) {
-          if (total < minTotal) {
-            minTotal = total
+        var bestStore = ''
+        var minTotal = Infinity
+        for (var store in storePrices) {
+          if (storePrices[store] < minTotal) {
+            minTotal = storePrices[store]
             bestStore = store
           }
         }
@@ -116,12 +129,14 @@ Page({
         this.setData({
           compareResults: results,
           compareData: compareData,
-          bestStore: bestStore
+          bestStore: bestStore,
+          hasResults: compareData.length > 0
         })
       },
       fail: () => {
+        wx.hideLoading()
         wx.showToast({
-          title: '对比失败',
+          title: '对比失败，请检查网络',
           icon: 'none'
         })
       }
@@ -129,29 +144,14 @@ Page({
   },
 
   clearSelection: function () {
-    const fruits = this.data.fruits.map(f => ({ ...f, selected: false }))
+    var fruits = this.data.fruits.map(f => ({ ...f, selected: false }))
     this.setData({
       fruits: fruits,
       selectedFruits: [],
       compareResults: null,
       compareData: [],
-      bestStore: ''
+      bestStore: '',
+      hasResults: false
     })
-  },
-
-  getEmoji: function (fruitName) {
-    const emojis = {
-      '苹果': '🍎',
-      '香蕉': '🍌',
-      '橙子': '🍊',
-      '西瓜': '🍉',
-      '葡萄': '🍇',
-      '草莓': '🍓',
-      '芒果': '🥭',
-      '榴莲': '🫐',
-      '蓝莓': '🫐',
-      '樱桃': '🍒'
-    }
-    return emojis[fruitName] || '🍎'
   }
 })

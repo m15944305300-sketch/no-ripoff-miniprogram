@@ -10,16 +10,21 @@ var emojis = {
   '芒果': '🥭',
   '榴莲': '🍍',
   '蓝莓': '🫐',
-  '樱桃': '🍒'
+  '樱桃': '🍒',
+  '苹果梨': '🍐',
+  '桔梗': '🥕'
 }
 
 module.exports = {
   getEmoji: function (name) {
     return emojis[name] || '🍎'
   },
-  // 去掉 "级" 字，用于 CSS 类名：A级 -> A
   gradeShort: function (grade) {
     if (!grade) return ''
     return grade.replace('级', '')
+  },
+  // 判断是否为非本地（延吉市）地区，用于标注
+  isExternal: function (region) {
+    return region !== '延吉市'
   }
 }

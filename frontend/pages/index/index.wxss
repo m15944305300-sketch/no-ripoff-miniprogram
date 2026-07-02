@@ -1,3 +1,41 @@
+/* 定位栏 */
+.location-bar {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 20rpx;
+  background: #fff3e0;
+  border-radius: 8rpx;
+  margin-bottom: 16rpx;
+}
+
+.location-icon {
+  font-size: 28rpx;
+  margin-right: 8rpx;
+}
+
+.location-text {
+  font-size: 26rpx;
+  color: #e65100;
+  font-weight: 500;
+}
+
+/* 商超名称行 */
+.store-name-row {
+  display: flex;
+  align-items: center;
+}
+
+/* 周边县市标签 */
+.region-tag {
+  display: inline-block;
+  padding: 2rpx 10rpx;
+  background: #e3f2fd;
+  color: #1976d2;
+  font-size: 18rpx;
+  border-radius: 6rpx;
+  margin-left: 8rpx;
+}
+
 .header {
   text-align: center;
   padding: 40rpx 0;
@@ -105,6 +143,42 @@
   font-size: 26rpx;
 }
 
+/* 重试按钮 */
+.retry-btn {
+  display: inline-block;
+  margin-top: 16rpx;
+  padding: 16rpx 48rpx;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+  color: white;
+  border-radius: 32rpx;
+  font-size: 26rpx;
+}
+
+/* 等级说明 */
+.grade-legend {
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.legend-item:last-child {
+  margin-bottom: 0;
+}
+
+.legend-desc {
+  font-size: 20rpx;
+  color: #888;
+  margin-left: 12rpx;
+}
+
+/* 使用指南 */
 .guide-list {
   display: flex;
   justify-content: space-around;
@@ -114,6 +188,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 16rpx 24rpx;
+  border-radius: 12rpx;
+  transition: background 0.2s;
+}
+
+/* 点击反馈 */
+.guide-hover {
+  background: #f0f0f0;
 }
 
 .guide-icon {
