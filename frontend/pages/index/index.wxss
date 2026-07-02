@@ -33,7 +33,7 @@
 .card-more { font-size: 20rpx; color: #ff6b6b; }
 .fruit-count { font-size: 20rpx; color: #999; }
 
-/* 全部水果 - 5列紧凑网格 */
+/* 全部水果 - 6列填满整屏 */
 .fruit-grid {
   display: flex;
   flex-wrap: wrap;
@@ -47,9 +47,9 @@
   padding: 8rpx 2rpx;
   background: #f8f9fa;
   border-radius: 10rpx;
-  width: calc(20% - 4.8rpx);  /* 5列 */
+  width: calc(16.6667% - 5rpx);  /* 6列，填满整屏无空白 */
   box-sizing: border-box;
-  min-height: 72rpx;
+  min-height: 70rpx;
 }
 .fruit-hover { background: #ffe0e0; }
 .fruit-emoji { font-size: 28rpx; line-height: 1.2; }
