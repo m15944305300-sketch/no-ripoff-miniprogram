@@ -29,6 +29,7 @@ Page({
     wx.request({
       url: app.globalData.baseUrl + '/fruits/',
       timeout: 8000,
+      header: { 'Bypass-Tunnel-Reminder': '1' },
       success: (res) => {
         if (res.data && Array.isArray(res.data)) {
           // 去重保护
@@ -105,6 +106,7 @@ Page({
       url: app.globalData.baseUrl + '/price-compare/',
       data: { fruit_names: fruitNames },
       timeout: 10000,
+      header: { 'Bypass-Tunnel-Reminder': '1' },
       success: (res) => {
         wx.hideLoading()
         if (!res.data) {

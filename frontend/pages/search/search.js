@@ -20,6 +20,7 @@ Page({
     wx.request({
       url: app.globalData.baseUrl + '/locate/',
       timeout: 5000,
+      header: { 'Bypass-Tunnel-Reminder': '1' },
       success: function (res) {
         if (res.data && res.data.city) {
           that.setData({ location: res.data.city })
@@ -49,6 +50,7 @@ Page({
       url: app.globalData.baseUrl + '/search/',
       data: { keyword: keyword },
       timeout: 8000,
+      header: { 'Bypass-Tunnel-Reminder': '1' },
       success: (res) => {
         if (res.data && Array.isArray(res.data)) {
           // 去重保护
@@ -91,6 +93,7 @@ Page({
     wx.request({
       url: app.globalData.baseUrl + '/prices/' + fruitId,
       timeout: 8000,
+      header: { 'Bypass-Tunnel-Reminder': '1' },
       success: (res) => {
         if (res.data && Array.isArray(res.data)) {
           this.setData({ currentPrices: res.data })
