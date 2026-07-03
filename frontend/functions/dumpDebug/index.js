@@ -1,7 +1,7 @@
-// 云函数：查看数据库原始数据
-const cloud = require('wx-server-sdk')
+// 云函数：查看数据库原始数据（调试用）
+var cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
-const db = cloud.database()
+var db = cloud.database()
 
 exports.main = async (event, context) => {
   try {

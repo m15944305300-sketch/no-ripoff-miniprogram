@@ -1,5 +1,5 @@
 // 云函数：修复水果+商超数据
-// 简单逐条插入，3秒内完成
+// 并发批量插入，使用正确的 add({data: {...}}) 格式
 const cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
@@ -42,33 +42,37 @@ const STORES = [
 
 exports.main = async (event, context) => {
   try {
-    // 删除所有旧数据
-    await db.collection('fruits').where({_id: _.exists(true)}).remove()
-    await db.collection('stores').where({_id: _.exists(true)}).remove()
+    // 删除旧数据
+    await Promise.all([
+      db.collection('fruits').where({_id: _.exists(true)}).remove(),
+      db.collection('stores').where({_id: _.exists(true)}).remove()
+    ])
 
-    // 逐条插入水果（简单for循环，不用闭包IIFE）
+    // 并发插入水果（关键修复：add({data: {...}})）
+    var fruitPromises = []
     for (var fi = 0; fi < FRUITS.length; fi++) {
-      var fruit = FRUITS[fi]
-      await db.collection('fruits').add({
-        name: fruit.name,
-        category: fruit.category,
-        grade: fruit.grade
-      })
+      var f = FRUITS[fi]
+      fruitPromises.push(db.collection('fruits').add({data: {
+        name: f.name, category: f.category, grade: f.grade
+      }}))
     }
+    var fruitResults = await Promise.all(fruitPromises)
 
-    // 逐条插入商超
+    // 并发插入商超
+    var storePromises = []
     for (var si = 0; si < STORES.length; si++) {
-      var store = STORES[si]
-      await db.collection('stores').add({
-        name: store.name,
-        type: store.type,
-        address: store.address,
-        region: store.region,
-        sourceType: store.sourceType
-      })
+      var s = STORES[si]
+      storePromises.push(db.collection('stores').add({data: {
+        name: s.name, type: s.type, address: s.address,
+        region: s.region, sourceType: s.sourceType
+      }}))
     }
+    var storeResults = await Promise.all(storePromises)
 
-    return { success: true, fruits: FRUITS.length, stores: STORES.length }
+    var fruitOk = fruitResults.filter(function(r){return r && r._id}).length
+    var storeOk = storeResults.filter(function(r){return r && r._id}).length
+
+    return { success: true, fruits: fruitOk, stores: storeOk }
   } catch (err) {
     return { success: false, error: err.message }
   }

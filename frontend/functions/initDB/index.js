@@ -1,10 +1,10 @@
 // 云函数：初始化数据库（水果+商超基础数据）
 // 只在首次部署时手动调用一次
-const cloud = require('wx-server-sdk')
+var cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
-const db = cloud.database()
+var db = cloud.database()
 
-const FRUITS = [
+var FRUITS = [
   { name: "苹果", category: "仁果类", grade: "A级" },
   { name: "梨", category: "仁果类", grade: "A级" },
   { name: "苹果梨", category: "仁果类", grade: "A级" },
@@ -44,7 +44,7 @@ const FRUITS = [
   { name: "枣", category: "其他", grade: "A级" }
 ]
 
-const STORES = [
+var STORES = [
   { name: "美团优选", type: "线上平台", address: "延吉市自提点", region: "延吉市", sourceType: "平台价" },
   { name: "京东秒送", type: "线上平台", address: "延吉市配送范围", region: "延吉市", sourceType: "平台价" },
   { name: "延吉百货大楼", type: "百货商超", address: "延吉市光明街", region: "延吉市", sourceType: "零售价" },
@@ -61,26 +61,26 @@ const STORES = [
 exports.main = async (event, context) => {
   try {
     // 清空旧数据（云开发要求非空查询条件）
-    var oldFruits = await db.collection('fruits').get()
+    var oldFruits = await db.collection('fruits').limit(100).get()
     for (var k = 0; k < oldFruits.data.length; k++) {
       await db.collection('fruits').doc(oldFruits.data[k]._id).remove()
     }
-    var oldStores = await db.collection('stores').get()
+    var oldStores = await db.collection('stores').limit(100).get()
     for (var m = 0; m < oldStores.data.length; m++) {
       await db.collection('stores').doc(oldStores.data[m]._id).remove()
     }
 
-    // 插入水果：逐条插入（云开发add只能一次插入一条）
+    // 插入水果：逐条插入，使用 data 包裹
     var fruitCount = 0
     for (var i = 0; i < FRUITS.length; i++) {
-      await db.collection('fruits').add(FRUITS[i])
+      await db.collection('fruits').add({ data: FRUITS[i] })
       fruitCount++
     }
 
     // 插入商超：逐条插入
     var storeCount = 0
     for (var j = 0; j < STORES.length; j++) {
-      await db.collection('stores').add(STORES[j])
+      await db.collection('stores').add({ data: STORES[j] })
       storeCount++
     }
 
